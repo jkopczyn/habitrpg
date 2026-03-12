@@ -143,5 +143,6 @@
   "deleteTask": "Delete Task",
   "deleteXTasks": "Delete <%= count %> Tasks",
   "brokenChallengeTaskCount": "This is one of <%= count %> tasks that are part of a Challenge that no longer exists.",
-  "confirmDeleteTasks": "Would you like to delete the tasks?"
+  "confirmDeleteTasks": "Would you like to delete the tasks?",
+  "hideWhenNotDue": "Hide when not scheduled"
 }

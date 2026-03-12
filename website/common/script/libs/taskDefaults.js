@@ -94,6 +94,7 @@ export default function taskDefaults (task, user) {
       frequency: 'weekly',
       daysOfMonth: [],
       weeksOfMonth: [],
+      hideWhenNotDue: false,
       yesterDaily: true,
     });
   }

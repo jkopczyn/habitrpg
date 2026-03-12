@@ -383,6 +383,26 @@
           </div>
         </div>
         <div
+          v-if="task.type === 'daily'"
+          class="option mt-3"
+        >
+          <div class="form-group">
+            <div class="custom-control custom-checkbox">
+              <input
+                id="hide-when-not-due"
+                v-model="task.hideWhenNotDue"
+                class="custom-control-input"
+                type="checkbox"
+                :disabled="challengeAccessRequired"
+              >
+              <label
+                class="custom-control-label"
+                for="hide-when-not-due"
+              >{{ $t('hideWhenNotDue') }}</label>
+            </div>
+          </div>
+        </div>
+        <div
           v-if="!groupId"
           class="tags-select option mt-3"
         >

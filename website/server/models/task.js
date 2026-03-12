@@ -404,6 +404,7 @@ export const DailySchema = new Schema(_.defaults({
   weeksOfMonth: { $type: [Number], default: () => [] },
   isDue: { $type: Boolean },
   nextDue: [{ $type: String }],
+  hideWhenNotDue: { $type: Boolean, default: false },
   yesterDaily: { $type: Boolean, default: true, required: true },
 }, habitDailySchema(), dailyTodoSchema()), subDiscriminatorOptions);
 export const daily = Task.discriminator('daily', DailySchema);

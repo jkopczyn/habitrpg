@@ -14,7 +14,7 @@ const taskFilters = {
   daily: {
     label: 'dailies',
     filters: [
-      { label: 'all', filterFn: () => true, default: true },
+      { label: 'all', filterFn: t => !t.hideWhenNotDue || t.isDue, default: true },
       { label: 'due', filterFn: t => !t.completed && t.isDue },
       { label: 'notDue', filterFn: t => t.completed || !t.isDue },
     ],
