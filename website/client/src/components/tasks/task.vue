@@ -11,6 +11,7 @@
         'task-not-scoreable': showTaskLockIcon,
         'link-exempt': !isChallengeTask && !isGroupTask,
       }, `type_${task.type}`, difficultyClass
+      }, `type_${task.type}`, difficultyClass
       ]"
       @click="castEnd($event, task)"
     >
@@ -189,6 +190,14 @@
               class="task-notes small-text"
               :class="{'has-checklist': task.notes && hasChecklist}"
             ></div>
+            <div class="d-flex align-items-center difficulty-stars">
+              <span
+                v-for="n in difficultyStars"
+                :key="'star-' + n"
+                class="svg-icon difficulty-star"
+                v-html="icons.difficultyStar"
+              ></span>
+            </div>
           </div>
           <div
             v-if="canViewchecklist"
@@ -874,6 +883,22 @@
     }
   }
 
+  .difficulty-stars {
+    padding: 0 8px;
+
+    .difficulty-star {
+      width: 10px;
+      height: 10px;
+      margin-right: 2px;
+
+      ::v-deep svg {
+        width: 10px;
+        height: 10px;
+        fill: $gray-200;
+      }
+    }
+  }
+
   .tags-popover ::v-deep {
     .tags-container {
       flex-wrap: wrap;
@@ -932,6 +957,7 @@ import deleteIcon from '@/assets/svg/delete.svg?raw';
 import checklistIcon from '@/assets/svg/checklist.svg?raw';
 import lockIcon from '@/assets/svg/lock.svg?raw';
 import menuIcon from '@/assets/svg/menu.svg?raw';
+import difficultyStarIcon from '@/assets/svg/difficulty-trivial.svg?raw';
 import markdownDirective from '@/directives/markdown';
 import scoreTask from '@/mixins/scoreTask';
 import sync from '@/mixins/sync';
@@ -979,6 +1005,7 @@ export default {
         bottom: bottomIcon,
         menu: menuIcon,
         lock: lockIcon,
+        difficultyStar: difficultyStarIcon,
       }),
     };
   },
@@ -1122,6 +1149,12 @@ export default {
         0.1: 'difficulty-trivial', 1: 'difficulty-easy', 1.5: 'difficulty-medium', 2: 'difficulty-hard'
         };
       return map[this.task.priority] || 'difficulty-easy';
+    },
+    difficultyStars () {
+      const map = {
+        0.1: 1, 1: 2, 1.5: 3, 2: 4
+        };
+      return map[this.task.priority] || 2;
     },
   },
   methods: {
