@@ -10,7 +10,7 @@
         'task-not-editable': !teamManagerAccess,
         'task-not-scoreable': showTaskLockIcon,
         'link-exempt': !isChallengeTask && !isGroupTask,
-      }, `type_${task.type}`
+      }, `type_${task.type}`, difficultyClass
       ]"
       @click="castEnd($event, task)"
     >
@@ -1116,6 +1116,12 @@ export default {
         }
       }
       return true;
+    },
+    difficultyClass () {
+      const map = {
+        0.1: 'difficulty-trivial', 1: 'difficulty-easy', 1.5: 'difficulty-medium', 2: 'difficulty-hard'
+        };
+      return map[this.task.priority] || 'difficulty-easy';
     },
   },
   methods: {
