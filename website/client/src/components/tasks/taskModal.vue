@@ -6,7 +6,7 @@
     size="sm"
     :hide-footer="true"
     @hidden="onClose()"
-    @show="syncTask()"
+    @show="onModalShow()"
     @shown="focusInput()"
   >
     <div
@@ -394,6 +394,7 @@
                 class="custom-control-input"
                 type="checkbox"
                 :disabled="challengeAccessRequired"
+                @change="hideWhenNotDueManuallySet = true"
               >
               <label
                 class="custom-control-label"
@@ -1217,6 +1218,9 @@ import calendarIcon from '@/assets/svg/calendar.svg?raw';
 import gripIcon from '@/assets/svg/grip.svg?raw';
 import InformationIcon from '@/components/ui/informationIcon.vue';
 
+// New dailies starting at least this many days in the future are default-hidden until then, on create
+const HIDE_WHEN_NOT_DUE_THRESHOLD_DAYS = 3;
+
 export default {
   components: {
     InformationIcon,
@@ -1271,6 +1275,7 @@ export default {
         { key: 'per', label: 'perception', description: 'perTaskText' },
       ],
       calendarHighlights: { dates: [new Date()] },
+      hideWhenNotDueManuallySet: false,
     };
   },
   computed: {
@@ -1376,10 +1381,16 @@ export default {
   },
   watch: {
     task () {
+      this.hideWhenNotDueManuallySet = this.purpose === 'edit';
       this.syncTask();
     },
     'task.startDate': function taskStartDate () {
       this.calculateMonthlyRepeatDays();
+      if (this.task.type === 'daily' && !this.hideWhenNotDueManuallySet) {
+        const startDate = moment(this.task.startDate).startOf('day');
+        const threshold = moment().startOf('day').add(HIDE_WHEN_NOT_DUE_THRESHOLD_DAYS, 'days');
+        this.task.hideWhenNotDue = startDate.isAfter(threshold);
+      }
     },
     'task.frequency': function taskFrequency () {
       this.calculateMonthlyRepeatDays();
@@ -1399,6 +1410,10 @@ export default {
       createTask: 'tasks:create',
       createTag: 'tags:createTag',
     }),
+    onModalShow () {
+      this.hideWhenNotDueManuallySet = this.purpose === 'edit';
+      this.syncTask();
+    },
     cssClass (suffix) {
       if (!this.task) {
         return '';
